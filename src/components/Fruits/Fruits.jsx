@@ -1,28 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./Fruits.css"
 import FruitForm from "./FruitForm/FruitForm"
+import FruitList from "./FruitList/FruitList"
+import { getAllFruits } from '../../services/fruitService'
 function Fruits() {
 
-    const [fruits, setFruits] = useState([
-        { id: 1, name: "Apple", color: "Red", inStock: true, emoji: "🍎" },
-        { id: 2, name: "Banana", color: "Yellow", inStock: false, emoji: "🍌" },
-        { id: 3, name: "Grapes", color: "Purple", inStock: true, emoji: "🍇" },
-        { id: 4, name: "Kiwi", color: "Brown", inStock: false, emoji: "🥝" },
-        { id: 5, name: "Strawberry", color: "Red", inStock: true, emoji: "🍓" },
-        { id: 6, name: "Watermelon", color: "Green", inStock: false, emoji: "🍉" },
-        { id: 7, name: "Pineapple", color: "Yellow", inStock: true, emoji: "🍍" },
-        { id: 8, name: "Mango", color: "Orange", inStock: false, emoji: "🥭" },
-        { id: 9, name: "Peach", color: "Orange", inStock: true, emoji: "🍑" },
-        { id: 10, name: "Pear", color: "Green", inStock: false, emoji: "🍐" },
-        { id: 11, name: "Cherry", color: "Red", inStock: true, emoji: "🍒" },
-        { id: 12, name: "Blueberry", color: "Blue", inStock: false, emoji: "🫐" }
-    ])
-  
+    const [fruits, setFruits] = useState([]);
 
      const [collectedFruits, setCollectedFruits] = useState([]);
-     const toggleStock = (id) => {
-      setFruits(fruits.map(fruit => fruit.id === id ? {... fruit, inStock: !fruit.inStock} : fruit))
-    }
+     useEffect(() => {
+      const fetchFruits = async () => {
+        const allFruits = await getAllFruits();
+        setFruits(allFruits);
+      
+      }
+      fetchFruits();
+    }, [])
     const handleAddFruit = (fruit) => {
       if (!fruit.inStock) {
         console.log("This fruit is out of stock!")
@@ -34,13 +27,6 @@ function Fruits() {
     const handleRemoveFruit = (fruit) => {
       setCollectedFruits(collectedFruits.filter(f => f.id !== fruit.id))
   }
-    // const handleAddFruit = (fruit) => {
-    //   setCollectedFruits()
-    // console.log(collectedFruits, "collected Fruits")
-
-    // const handleRemoveFruit = (fruits) => {
-    //   setCollectedFruits(collectedFruits.filter(f => f.id !== fruit.id))
-    // }
     const addFruit = (name, emoji) => {
       const newFruit = {
         id: fruits.length + 1,
@@ -54,14 +40,7 @@ function Fruits() {
     return (
       <>
         <ul>
-            {fruits.map((fruit) => (
-                <li key={fruit.id}>{fruit.name} {fruit.emoji} 
-                <strong>{fruit.inStock ? "in Stock" : "Out of Stock"}
-                </strong>
-                <button onClick={() => toggleStock(fruit.id)}>{fruits.inStock ? "in Stock" : "Out of Stock"}</button>
-                </li>
-            ))
-            }
+          <FruitList  fruits={fruits}/>
         </ul>
         <FruitForm addFruit={addFruit} />
           <div>
