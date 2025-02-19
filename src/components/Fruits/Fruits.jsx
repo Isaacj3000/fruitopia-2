@@ -7,6 +7,7 @@ import FruitSearch from '../FruitsSearch/FruitSearch';
 
 
 
+
 function Fruits() {
     const [fruits, setFruits] = useState([])
     const [collectedFruits, setCollectedFruits] = useState([]);
