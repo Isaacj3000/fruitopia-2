@@ -7,13 +7,12 @@ try {
 } catch (error) {
     console.error('Error fetching all fruits:', error);
     return [];
-    
 }
 }
 
 export const show = async (fruit) => {
     try {
-        const res = await fetch(`${BASE_URL}?name=${fruit.id}`);
+        const res = await fetch(`${BASE_URL}?name=${fruit}`);
         const data = await res.json();
         const seletedFruit = data.find(item => item.name.toLowerCase() === fruit.toLowerCase());
         if (seletedFruit) {
@@ -22,6 +21,6 @@ export const show = async (fruit) => {
         }
     } catch (error) {
         console.error('Error fetching fruit:', error);
-        return null;
     }
 }
+show('banana');

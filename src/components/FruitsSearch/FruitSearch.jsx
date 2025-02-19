@@ -6,13 +6,12 @@ function FruitSearch() {
     const [fruitData, setFruitData] = useState('');
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!fruit.trim()) return;
-        try {
+        if (!fruit.trim()) return
+         try {
             const data = await show(fruit);
             setFruit(data);
         } catch (error) {
             console.error("Error fetching Fruit data:", error);
-            
         }
         setFruit('');
     }
@@ -28,6 +27,7 @@ function FruitSearch() {
                 name='fruit' 
                 value={fruit}
                 id='fruit'
+                onChange={(e) => setFruit(e.target.value)}
                 />
             </form>
         </section>
