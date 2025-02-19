@@ -1,82 +1,97 @@
-import React, { useState, useEffect } from 'react'
-import "./Fruits.css"
-import FruitForm from "./FruitForm/FruitForm"
-import FruitList from "./FruitList/FruitList"
-import { getAllFruits } from '../../services/fruitService'
+import { useState, useEffect } from 'react'
+import "../Fruits/Fruits.css";
+import { getAllFruits } from '../../services/fruitService';
+import FruitForm from './FruitForm/FruitForm';
+import FruitList from './FruitList/FruitList';
+import FruitSearch from '../FruitsSearch/FruitSearch';
+
+
+
 function Fruits() {
+    const [fruits, setFruits] = useState([])
+    const [collectedFruits, setCollectedFruits] = useState([]);
 
-    const [fruits, setFruits] = useState([]);
 
-     const [collectedFruits, setCollectedFruits] = useState([]);
-     useEffect(() => {
-      const fetchFruits = async () => {
-        const allFruits = await getAllFruits();
-        setFruits(allFruits);
-      
-      }
-      fetchFruits();
+
+    useEffect(() => {
+        const fetchFruits = async () => {
+            const allFruits = await getAllFruits()
+            setFruits(allFruits);
+        }
+        fetchFruits();
     }, [])
+
     const handleAddFruit = (fruit) => {
-      if (!fruit.inStock) {
-        console.log("This fruit is out of stock!")
-        return;
-      }
-      setCollectedFruits([... collectedFruits, fruit])
+        if (!fruit.inStock) {
+            console.log("This fruit is out of stock")
+            return;
+        }
+        setCollectedFruits([...collectedFruits, fruit])
+
 
     }
+    console.log(collectedFruits, "collected Fruits")
+
+
     const handleRemoveFruit = (fruit) => {
-      setCollectedFruits(collectedFruits.filter(f => f.id !== fruit.id))
-  }
-    const addFruit = (name, emoji) => {
-      const newFruit = {
-        id: fruits.length + 1,
-        name,
-        emoji,
-        color: "gray",
-        inStock: true
-      }
-      setFruits([...fruits, newFruit])
+        setCollectedFruits(collectedFruits.filter(f => f.id !== fruit.id))
     }
-    return (
-      <>
-        <ul>
-          <FruitList  fruits={fruits}/>
-        </ul>
-        <FruitForm addFruit={addFruit} />
-          <div>
-            <h1>Fruit Inventory</h1>
-            <div>
-              <h3>Available Fruits</h3>
-              <ul>
-                {
-                  fruits.map(fruit => (
-                    <li key={fruit.id}>
-                      <span>{fruit.name} {fruit.emoji}</span>
-                      {fruit.inStock && (
-                        <button>Add to collection</button>
-                      )}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-            <div>
-              <h3>Your Collection</h3>
-              <ul>
-                {
-                  collectedFruits.map(fruit => (
-                    <li key={fruit.id}>
-                        <span>{fruit.name} {fruit.emoji}</span>
-                        <button onClick={()=> handleRemoveFruit(fruit)}>Remove from collection</button>
-                    </li>
-                  ))
-                }
-              </ul>
 
+    const addFruit = (name, emoji) => {
+        const newFruit = {
+            id: fruits.length + 1,
+            name,
+            emoji,
+            color: "gray",
+            inStock: true
+        }
+        setFruits([...fruits, newFruit])
+    }
+
+    return (
+        <>
+
+            <FruitSearch fruits={fruits}/>
+            <FruitList fruits={fruits} />
+            < FruitForm addFruit={addFruit} />
+
+
+            <div>
+                <h1>Fruit Inventory</h1>
+                <div>
+                    <h3>Available Fruits:</h3>
+                    <ul>
+                        {
+                            fruits.map(fruit => (
+                                <li key={fruit.id}>
+                                    <span>{fruit.name} {fruit.emoji}</span>
+                                    {fruit.inStock && (
+                                        <button onClick={() => handleAddFruit(fruit)}>Add to collection</button>
+                                    )}
+
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <h3>Your Collection:</h3>
+                    <ul>
+
+                        {
+                            collectedFruits.map(fruit => (
+                                <li key={fruit.id}>
+                                    <span>{fruit.name} {fruit.emoji}</span>
+                                    <button onClick={() => handleRemoveFruit(fruit)}>Remove</button>
+
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
             </div>
-          </div>
-      </>
+        </>
     )
 }
 
-export default Fruits
+export default Fruits;
