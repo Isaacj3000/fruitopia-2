@@ -17,9 +17,3 @@ function FruitList({ fruits }) {
 }
 
 export default FruitList;
-
-
-
-
-
-
